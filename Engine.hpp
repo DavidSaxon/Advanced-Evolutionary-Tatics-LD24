@@ -6,11 +6,15 @@
     #define _ENGINE_H_
 
 #include <iostream>
+#include <vector>
+#include <map>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 
 #include "Define.hpp"
 #include "Event.hpp"
+#include "Entity.hpp"
+#include "entities/Grunt.hpp"
 using namespace std;
 
 class Engine : public Event {
@@ -51,12 +55,19 @@ public:
 //LEVEL
 private:
 
-
+    //VARIABLES
+    string levelName; //the name of the current level    /*loads the level from a file*/
+    map <int, vector<Entity*>*> entities; //a map that holds all the entites in the game in their respective groups
+    
+    
 public:
     
     //FUNCTIONS
     /*updates the current level*/
-    void levelUpdate();
+    void levelUpdate(int framesPassed);
+    
+    /*loads the level from a file*/
+    void loadLevel();
 
 //EVENT
 public:

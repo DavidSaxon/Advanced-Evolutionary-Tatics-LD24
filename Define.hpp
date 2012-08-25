@@ -6,13 +6,21 @@
 
 //DEFINES
 #define NATURAL_RESO_X 1920
-#define NATURAL_RESO_X 1080
+#define NATURAL_RESO_Y 1080
+
+#define LEVEL_ENTITIES 2 //the number of entity types in the level state
 
 //ENUMARTORS
 //Game States
 enum {
     MENU = 0,
     LEVEL
+};
+
+//Level entity types
+enum {
+    BACKGROUND = 0,
+    UNIT
 };
 
 #endif
