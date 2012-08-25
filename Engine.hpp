@@ -27,6 +27,16 @@ private:
     SDL_Surface* display; //the game window
     int width; //the width of the window
     int height; //the height of the window
+    int mouseX; //the x position of  the mouse
+    int mouseY; //the y position of the mouse
+    bool leftMouseDown; //is true when the left mouse is down
+    bool rightMouseDown; //is true when the right mouse is down
+    bool leftPressed; //is true when the left is first pressed
+    bool leftReleased; //is true just after the left is released
+    bool rightPressed; //is true when the right is first pressed
+    bool rightReleased; //is true just after the right is released
+    int mouseStartX; //where the mouse is first pressed
+    int mouseStartY;
 
 public:
 
@@ -81,6 +91,21 @@ public:
 
     /*When a key is pressed down*/
     void onKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode);
+    
+    /*When the mouse is moved*/
+    void onMouseMove(int mX, int mY, int relX, int relY, bool left,bool right,bool middle);
+    
+    /*When the left mouse button is pressed*/
+    void onLButtonDown(int mX, int mY);
+
+    /*When the left mouse button is released*/
+    void onLButtonUp(int mX, int mY);
+    
+    /*When the right mouse button is pressed*/
+    void onRButtonDown(int mX, int mY);
+    
+    /*When the right button is released*/
+    void onRButtonUp(int mX, int mY);
 
 };
 

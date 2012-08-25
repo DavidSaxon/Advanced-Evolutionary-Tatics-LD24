@@ -14,3 +14,33 @@ void Engine::onExit() {
 void Engine::onKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
     if (sym == SDLK_F7) running = false; //TODO: Remove me
 }
+
+/*When the mouse is moved*/
+void Engine::onMouseMove(int mX, int mY, int relX, int relY, bool left,bool right,bool middle) {
+    mouseX = mX;
+    mouseY = mY;
+}
+
+/*When the left mouse button is pressed*/
+void Engine::onLButtonDown(int mX, int mY) {
+    leftMouseDown = true;
+    leftPressed = true;
+    mouseStartX = mX;
+    mouseStartY = mY;
+}
+
+/*When the left mouse button is released*/
+void Engine::onLButtonUp(int mX, int mY) {
+    leftMouseDown = false;
+    leftReleased = true;
+}
+
+/*When the right mouse button is pressed*/
+void Engine::onRButtonDown(int mX, int mY) {
+    rightPressed = true;
+}
+
+/*When the right button is released*/
+void Engine::onRButtonUp(int mX, int mY) {
+    rightReleased = true;
+}

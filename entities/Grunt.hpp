@@ -14,6 +14,7 @@ private:
     
     //VARIABLES
     bool player; //is true when is the player's unit
+    bool selected; //is true when the unit is selecteds
     
 public:
 
@@ -29,6 +30,12 @@ public:
     
     /*draws the grunt*/
     void draw(int offsetX, int offsetY);
+    
+    /*Selects the unit if the mouse is on*/
+    bool mouseOn(int mouseStartX, int mouseStartY, int mouseX, int mouseY);
+    
+    /*Deselects the unit*/
+    void deselect();
     
 };
 

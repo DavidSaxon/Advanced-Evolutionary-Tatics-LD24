@@ -13,6 +13,16 @@ bool Engine::init() {
     running = true;
     gameState = LEVEL; //TODO: change to MENU in final
     levelName = "data/levels/test.lvl";
+    mouseX = 0;
+    mouseY = 0;
+    leftMouseDown = false;
+    rightMouseDown = false;
+    leftPressed = false;
+    leftReleased = false;
+    rightPressed = false;
+    rightReleased = false;
+    mouseStartX = 0;
+    mouseStartY = 0;
 
     //initialise sdl
     initSDL();
@@ -46,6 +56,8 @@ bool Engine::initSDL() {
 
 /*Initialise openGL*/
 bool Engine::initGL() {
+    glEnable (GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0, 0, 0, 0);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
