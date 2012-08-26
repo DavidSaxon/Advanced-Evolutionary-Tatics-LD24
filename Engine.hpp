@@ -8,13 +8,17 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <sys/timeb.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
+#include <png.h>
 
 #include "Define.hpp"
 #include "Event.hpp"
 #include "Entity.hpp"
-#include "entities/Grunt.hpp"
+#include "entities/Unit.hpp"
+#include "entities/Nexus.hpp"
+#include "entities/Wall.hpp"
 using namespace std;
 
 class Engine : public Event {
@@ -27,6 +31,8 @@ private:
     SDL_Surface* display; //the game window
     int width; //the width of the window
     int height; //the height of the window
+    double scaleX; //the x scale
+    double scaleY; //the y scale
     int mouseX; //the x position of  the mouse
     int mouseY; //the y position of the mouse
     bool leftMouseDown; //is true when the left mouse is down
@@ -37,6 +43,15 @@ private:
     bool rightReleased; //is true just after the right is released
     int mouseStartX; //where the mouse is first pressed
     int mouseStartY;
+    int frameRate; //the max frame rate of the game
+    int framesPassed; //the number of frames passed since the last loop
+    
+    //FUNCTIONS
+    //get the current time in milliseconds
+    int getMilliCount();
+    
+    //get the span of time since millicount
+    int getMilliSpan(int timeStart);
 
 public:
 

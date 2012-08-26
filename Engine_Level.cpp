@@ -12,7 +12,7 @@ void Engine::levelUpdate(int framesPassed) {
         leftReleased = false;
     }
 
-    //if the right or left mouse is pressed then deselect all player units
+    //if the left mouse is pressed then deselect all player units
     if (leftPressed) {
         vector<Entity*>::iterator q;
         for (q = entities[UNIT]->begin(); q != entities[UNIT]->end(); ++q) {
@@ -21,8 +21,40 @@ void Engine::levelUpdate(int framesPassed) {
         leftPressed = false;
     }
 
+    //if the right is pressed move the selected units to the destination*/
+    if (rightPressed) {
+        vector<Entity*>::iterator q;
+        for (q = entities[UNIT]->begin(); q != entities[UNIT]->end(); ++q) {
+            if ((*q)->selected) (*q)->setDest(mouseX, mouseY);
+        }
+        rightPressed = false;
+    }
+
     //update everything passed on the number of frames passed
     for(int i = 0; i < framesPassed; ++i) {
+        //Handle Collisons
+        vector<Entity*>::iterator q;
+        for (q = entities[UNIT]->begin(); q != entities[UNIT]->end(); ++q) {
+            //iterate through all walls to see if they are colliding
+            vector<Entity*>::iterator p;
+            for (p = entities[BACKGROUND]->begin(); p != entities[BACKGROUND]->end(); ++p) {
+                if ((*q)->collision((*p)->getX(), (*p)->getY(), (*p)->getW(), (*p)->getH()))
+                    (*q)->stop();
+            }
+            //iterate through the walls to see if they are colliding
+            for (p = entities[BUILDING]->begin(); p != entities[BUILDING]->end(); ++p) {
+                if ((*q)->collision((*p)->getX(), (*p)->getY(), (*p)->getW(), (*p)->getH()))
+                    (*q)->stop();
+            }
+            //iterate through the other units to see if they are colliding
+            for (p = entities[UNIT]->begin(); p != entities[UNIT]->end(); ++p) {
+                if ((*q) != (*p) && (*q)->collision((*p)->getX(), (*p)->getY(), (*p)->getW(), (*p)->getH())) {
+                        (*q)->pushAway((*p));
+                    }
+            }
+        }
+
+        //update everything
         for (int j = 0; j < LEVEL_ENTITIES; ++j) {
             vector<Entity*>::iterator q;
             for (q = entities[j]->begin(); q != entities[j]->end(); ++q) {
@@ -91,6 +123,7 @@ void Engine::loadLevel() {
         if (line.at(0) == '#') { //the line is an entity tag
             if (line.substr(1, 4)  == "BACK") currentLoad = BACKGROUND; //read the background
             else if (line.substr(1, 4)  == "UNIT") currentLoad = UNIT; //read units
+            else if (line.substr(1, 4)  == "BUIL") currentLoad = BUILDING; //read units
 
             //create a new vector for the current load type
             entities.insert(pair<int, vector<Entity*>*>(currentLoad, new vector<Entity*>()));
@@ -98,7 +131,9 @@ void Engine::loadLevel() {
     }
 
     //FIXME: just for testing currently
-    entities[UNIT]->push_back(new Grunt(50, 50, true));
-    entities[UNIT]->push_back(new Grunt(200, 200, true));
-    entities[UNIT]->push_back(new Grunt(150, 400, false));
+    entities[UNIT]->push_back(new Unit(50, 50, true));
+    entities[UNIT]->push_back(new Unit(200, 200, true));
+    entities[UNIT]->push_back(new Unit(1000, 500, false));
+    entities[BUILDING]->push_back(new Nexus(500, 500, true));
+    entities[BACKGROUND]->push_back(new Wall(400, 200));
 }

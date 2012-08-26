@@ -17,16 +17,16 @@ void Engine::onKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 
 /*When the mouse is moved*/
 void Engine::onMouseMove(int mX, int mY, int relX, int relY, bool left,bool right,bool middle) {
-    mouseX = mX;
-    mouseY = mY;
+    mouseX = mX*scaleX;
+    mouseY = mY*scaleY;
 }
 
 /*When the left mouse button is pressed*/
 void Engine::onLButtonDown(int mX, int mY) {
     leftMouseDown = true;
     leftPressed = true;
-    mouseStartX = mX;
-    mouseStartY = mY;
+    mouseStartX = mX*scaleX;
+    mouseStartY = mY*scaleY;
 }
 
 /*When the left mouse button is released*/

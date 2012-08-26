@@ -23,6 +23,8 @@ bool Engine::init() {
     rightReleased = false;
     mouseStartX = 0;
     mouseStartY = 0;
+    frameRate = 60;
+    framesPassed = 0;
 
     //initialise sdl
     initSDL();
@@ -42,8 +44,12 @@ bool Engine::init() {
     //get the width and height
     width = display->w;
     height = display->h;
+    
+    //find the scale
+    scaleX = NATURAL_RESO_X/(float) width;
+    scaleY = NATURAL_RESO_Y/(float) height;
 
-    loadLevel(); //TODO: remove this from heref
+    loadLevel(); //TODO: remove this from here
 
     return true; //everything is initialised
 }
@@ -72,9 +78,18 @@ bool Engine::initGL() {
 /*Run the main game loop*/
 bool Engine::execute() {
     SDL_Event event; //creates a new event
+    int startTime = getMilliCount();
+    int lastTime = startTime;
 
     //start the main game loop
     while (running) {
+        //handle fps
+        framesPassed = 0;
+        if (getMilliSpan(lastTime) > 16) { //if a frame has passed
+            framesPassed = getMilliSpan(lastTime)/16; //gets the number of frames passed
+            lastTime += framesPassed*(16);
+        }
+
         while (SDL_PollEvent(&event)) onEvent(&event); //polls the events
 
         //clear the screen
@@ -85,7 +100,7 @@ bool Engine::execute() {
             case MENU:
                 break;
             case LEVEL: //update the level
-                levelUpdate(1);
+                levelUpdate(framesPassed);
                 break;
         }
 
@@ -101,4 +116,19 @@ bool Engine::cleanup() {
     SDL_FreeSurface(display); //Remove the display window
 
     return true; //cleanup has compeleted
+}
+
+//get the current time in milliseconds
+int Engine::getMilliCount() {
+	timeb tb;
+	ftime(&tb);
+	int count = tb.millitm+(tb.time & 0xfffff)*1000;
+    return count;
+}
+
+//get the span of time since millicount
+int Engine::getMilliSpan(int timeStart) {
+	int span = getMilliCount()-timeStart;
+	//if(span < 0) span += 0x100000*1000;
+	return span;
 }
