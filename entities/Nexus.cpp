@@ -15,9 +15,7 @@ Nexus::~Nexus() {}
 
 //FUNCTIONS
 /*update the nexus*/
-void Nexus::update() {
-    
-}
+void Nexus::update() {}
 
 /*draw the nexus*/
 void Nexus::draw(int offsetX, int offsetY) {

@@ -13,6 +13,9 @@ void Entity::setDest(int x, int y) {}
 /*returns true if the mouse pos is on the entity*/
 bool Entity::mouseOn(int mouseStartX, int mouseStartY, int mouseX, int mouseY) {}
 
+/*returns true if the mouse pos is on the entity*/
+bool Entity::mouseOn(int mouseY, int mouseX) {};
+
 /*Returns true if the entity is colliding with the given object coords*/
 bool Entity::collision(int x, int y, int w, int h) {}
 

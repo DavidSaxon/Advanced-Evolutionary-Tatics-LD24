@@ -3,10 +3,12 @@
 //FUNCTIONS
 /*updates the current level*/
 void Engine::levelUpdate(int framesPassed) {
+    vector<Entity*> newAttacks; //the new attacks
+    vector<Entity*> remove; //entities to remove
     //if the mouse is released find the entities in the dragbox
     if(leftReleased) {
         vector<Entity*>::iterator q;
-        for (q = entities[UNIT]->begin(); q != entities[UNIT]->end(); ++q) {
+        for (q = units.begin(); q != units.end(); ++q) {
             (*q)->mouseOn(mouseStartX, mouseStartY, mouseX, mouseY);
         }
         leftReleased = false;
@@ -15,17 +17,27 @@ void Engine::levelUpdate(int framesPassed) {
     //if the left mouse is pressed then deselect all player units
     if (leftPressed) {
         vector<Entity*>::iterator q;
-        for (q = entities[UNIT]->begin(); q != entities[UNIT]->end(); ++q) {
-            (*q)->deselect();
+        for (q = units.begin(); q != units.end(); ++q) {
+            if ((*q)->mouseOn(mouseX, mouseY)) (*q)->selected = true;
+            else (*q)->deselect();
         }
         leftPressed = false;
     }
 
     //if the right is pressed move the selected units to the destination*/
     if (rightPressed) {
+        //first check if the destination is a enemy unit
         vector<Entity*>::iterator q;
-        for (q = entities[UNIT]->begin(); q != entities[UNIT]->end(); ++q) {
-            if ((*q)->selected) (*q)->setDest(mouseX, mouseY);
+        Entity* target = NULL;
+        for (q = units.begin(); q != units.end(); ++q) {
+            if ((*q)->mouseOn(mouseX, mouseY) && !(*q)->player) target = (*q);
+        }
+
+        for (q = units.begin(); q != units.end(); ++q) {
+            if ((*q)->selected) {
+                if (target == NULL) (*q)->setDest(mouseX, mouseY);
+                else (*q)->target = target;
+            }
         }
         rightPressed = false;
     }
@@ -34,45 +46,72 @@ void Engine::levelUpdate(int framesPassed) {
     for(int i = 0; i < framesPassed; ++i) {
         //Handle Collisons
         vector<Entity*>::iterator q;
-        for (q = entities[UNIT]->begin(); q != entities[UNIT]->end(); ++q) {
+        for (q = units.begin(); q != units.end();) {
             //iterate through all walls to see if they are colliding
             vector<Entity*>::iterator p;
-            for (p = entities[BACKGROUND]->begin(); p != entities[BACKGROUND]->end(); ++p) {
+            for (p = backgrounds.begin(); p != backgrounds.end(); ++p) {
                 if ((*q)->collision((*p)->getX(), (*p)->getY(), (*p)->getW(), (*p)->getH()))
                     (*q)->stop();
             }
             //iterate through the walls to see if they are colliding
-            for (p = entities[BUILDING]->begin(); p != entities[BUILDING]->end(); ++p) {
+            for (p = buildings.begin(); p != buildings.end(); ++p) {
                 if ((*q)->collision((*p)->getX(), (*p)->getY(), (*p)->getW(), (*p)->getH()))
                     (*q)->stop();
             }
             //iterate through the other units to see if they are colliding
-            for (p = entities[UNIT]->begin(); p != entities[UNIT]->end(); ++p) {
+            for (p = units.begin(); p != units.end(); ++p) {
                 if ((*q) != (*p) && (*q)->collision((*p)->getX(), (*p)->getY(), (*p)->getW(), (*p)->getH())) {
                         (*q)->pushAway((*p));
                     }
             }
+            //iterate through attacks to see if they are colliding
+            for (p = attacks.begin(); p != attacks.end();) {
+                if ((*q)->player != (*p)->player && (*q)->collision((*p)->getX()-12, (*p)->getY()-12, (*p)->getW()+24, (*p)->getH()+24)) {
+                    (*q)->health = (*q)->health-(*p)->damage;
+                    p = attacks.erase(p);
+                    if ((*q)->health < 1) q = units.erase(q);
+                }
+                else ++p;
+            }
+        
+            if (q != units.end()) ++q;
         }
 
         //update everything
-        for (int j = 0; j < LEVEL_ENTITIES; ++j) {
-            vector<Entity*>::iterator q;
-            for (q = entities[j]->begin(); q != entities[j]->end(); ++q) {
-                (*q)->update();
+        for (q = units.begin(); q != units.end(); ++q) {
+            if ((*q)->attackFlag) { //if attacking create attack
+                int x1 = (*q)->getX();
+                int y1 = (*q)->getY();
+                int x2 = (*q)->target->getX();
+                int y2 = (*q)->target->getY();
+                if ((*q)->attackType == 0) newAttacks.push_back(new Attack(x1, y1, x2, y2, 0, (*q)->player, &attackSmallTex));
+                (*q)->attackFlag = false;
             }
+            (*q)->update();
+        }
+        for (q = attacks.begin(); q != attacks.end();) {
+            (*q)->update();
+            if ((*q)->dead) q = attacks.erase(q);
+            else ++q;
         }
     }
 
     drawBackground();
 
-    //now draw everything
-    for (int j = 0; j < LEVEL_ENTITIES; ++j) {
-        vector<Entity*>::iterator q;
-        for (q = entities[j]->begin(); q != entities[j]->end(); ++q) {
-            (*q)->draw(0, 0); //TODO: use proper offset
-        }
+    //now draw everything else
+    vector<Entity*>::iterator q;
+    for (q = backgrounds.begin(); q != backgrounds.end(); ++q) {
+        (*q)->draw(0, 0); //TODO: use proper offset
     }
-
+    for (q = buildings.begin(); q != buildings.end(); ++q) {
+        (*q)->draw(0, 0); //TODO: use proper offset
+    }
+    for (q = units.begin(); q != units.end(); ++q) {
+        (*q)->draw(0, 0); //TODO: use proper offset
+    }
+    for (q = attacks.begin(); q != attacks.end(); ++q) {
+        (*q)->draw(0, 0); //TODO: use proper offset
+    }
 
 
     //draw the drag box
@@ -112,6 +151,20 @@ void Engine::levelUpdate(int framesPassed) {
         glVertex2f(dbx1, dby1+dby2);
         glEnd();
     }
+
+    //add the new attacks
+    if (newAttacks.size() > 0) {
+       vector<Entity*>::iterator v;
+        for (v = newAttacks.begin(); v != newAttacks.end(); ++v) {
+            attacks.push_back(*v);
+        }
+    }
+
+    //remove dead entities
+    /*vector<Entity*>::iterator r;
+    for (r = remove.begin(); r != remove.end(); ++r) {
+        attacks.erase(r);
+    }*/
 }
 
 /*Draw the level background*/
@@ -129,31 +182,19 @@ void Engine::drawBackground() {
     }
 }
 
-/*loads the level from a file*/
+/*loads the level*/
 void Engine::loadLevel() {
-    const char* file = levelName.c_str();
-    FILE* fileHandle = fopen(file, "r");
-    int currentLoad = 0; //the current entity type to load
-
-    while (!feof(fileHandle)) {
-        char charLine[1000];
-        fgets(charLine, 1000, fileHandle); //gets the current line of the file
-        string line = charLine;
-
-        if (line.at(0) == '#') { //the line is an entity tag
-            if (line.substr(1, 4)  == "BACK") currentLoad = BACKGROUND; //read the background
-            else if (line.substr(1, 4)  == "UNIT") currentLoad = UNIT; //read units
-            else if (line.substr(1, 4)  == "BUIL") currentLoad = BUILDING; //read units
-
-            //create a new vector for the current load type
-            entities.insert(pair<int, vector<Entity*>*>(currentLoad, new vector<Entity*>()));
-        }
+    for (int i = 0; i < LEVEL_ENTITIES; ++i) { //create each vector
+        entities.insert(pair<int, vector<Entity*>*>(i, new vector<Entity*>()));
     }
 
-    //FIXME: just for testing currently
-    entities[UNIT]->push_back(new Unit(50, 50, true, softBodySmallTex));
-    entities[UNIT]->push_back(new Unit(200, 200, true, softBodySmallTex));
-    entities[UNIT]->push_back(new Unit(1000, 500, false, softBodySmallTex));
-    entities[BUILDING]->push_back(new Nexus(500, 500, true, &nexusBodyTex, &nexusBlueTex));
-    entities[BACKGROUND]->push_back(new Wall(400, 200, &rockTex));
+    //add the entities
+    //add units
+    units.push_back(new Unit(50, 50, true, softBodySmallTex));
+    units.push_back(new Unit(200, 200, true, softBodySmallTex));
+    units.push_back(new Unit(1000, 500, false, softBodySmallTex));
+    //add buildings
+    buildings.push_back(new Nexus(500, 500, true, &nexusBodyTex, &nexusBlueTex));
+    //add backgrounds
+    backgrounds.push_back(new Wall(400, 200, &rockTex));
 }

@@ -11,12 +11,20 @@ Unit::Unit(int x, int y, bool p, GLuint t) {
     width = 25;
     height = 25;
     selected = false;
+    health = 20;
     moveSpeed = 2;
+    attackType = 0;
+    range = 100;
+    target = NULL;
     destX = xPos;
     destY = yPos;
     move = false;
     xMove = 0;
     yMove = 0;
+    attackFlag = false;
+    dead = false;
+    attackWait = 30;
+    attackCounter = 0;
 
     if (!player) newDirection();
 }
@@ -27,6 +35,23 @@ Unit::~Unit() {}
 //FUNCTIONS
 /*updates the Unit*/
 void Unit::update() {
+    
+    if (target != NULL) {
+        if (target->health < 1) target = NULL; //target is dead TODO: get evolution here
+        else {
+            move = true;
+            destX = target->getX();
+            destY = target->getY();
+            if (fabs(target->getX()-xPos) <= range && fabs(target->getY()-yPos) <= range) { //attack!
+                if (attackCounter < 1) {
+                    attackFlag = true;
+                    attackCounter = attackWait;
+                }
+                move = false;
+            }
+            else move = true;
+        }
+    }
     if (player) { //if is a player unit
         if (move) { //move the unit towards it's destination
             if ((xPos >= destX-moveSpeed && xPos <= destX+moveSpeed) && (yPos >= destY-moveSpeed && yPos <= destY+moveSpeed)) move = false; //stop moving
@@ -51,6 +76,8 @@ void Unit::update() {
             yPos += yMove;
         }
     }
+
+    --attackCounter;
 }
 
 /*draws the Unit*/
@@ -82,6 +109,8 @@ void Unit::setDest(int x, int y) {
     xMove = moveSpeed*(cos((fabs(destY-yPos))/(sqrt(pow(fabs(destX-xPos), 2)+pow(fabs(destY-yPos), 2))))/1.570796326);
     yMove = moveSpeed*(cos((fabs(destX-xPos))/(sqrt(pow(fabs(destX-xPos), 2)+pow(fabs(destY-yPos), 2))))/1.570796326);
     move = true;
+    target = NULL;
+    attackFlag = false;
 }
 
 /*only used for enemy units where they find a new direction*/
@@ -91,6 +120,11 @@ void Unit::newDirection() {
     if (ne) yMove = -(moveSpeed-fabs(xMove));
     else yMove = moveSpeed-fabs(xMove);
     move = true;
+}
+
+/*returns true if the mouse is click on the unit*/
+bool Unit::mouseOn(int mouseX, int mouseY) {
+    return (mouseX > xPos && mouseX < xPos+width && mouseY > yPos && mouseY < yPos+height);
 }
 
 /*Selects the unit if the mouse is on*/
@@ -136,9 +170,11 @@ bool Unit::collision(int x, int y, int w, int h) {
     return c;
 }
 
-/*Stops the entity if it is a moving entity*/
+/*Stops the unit*/
 void Unit::stop() {
     move = false;
+    target = NULL; //loses target
+    attackFlag = false;
 }
 
 /*Push the other unit away and move away*/

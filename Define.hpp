@@ -8,7 +8,7 @@
 #define NATURAL_RESO_X 1920
 #define NATURAL_RESO_Y 1080
 
-#define LEVEL_ENTITIES 3 //the number of entity types in the level state
+#define LEVEL_ENTITIES 4 //the number of entity types in the level state
 
 //ENUMARTORS
 //Game States
@@ -21,7 +21,8 @@ enum {
 enum {
     BACKGROUND = 0,
     UNIT,
-    BUILDING
+    BUILDING,
+    ATTACK
 };
 
 #endif

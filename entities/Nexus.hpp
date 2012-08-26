@@ -14,7 +14,6 @@ class Nexus : public Entity {
 private:
 
     //VARIABLES
-    bool player; //is true when is the player's unit
     GLuint* bodyTex; //the main texture of the nexus
     GLuint* colourTex; //the nexus colour texture
 

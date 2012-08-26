@@ -15,14 +15,17 @@ class Unit : public Entity {
 private:
     
     //VARIABLES
-    bool player; //is true when is the player's unit
     int moveSpeed; //the move speed of the unit
+    int range; //the unit's range
     int destX; //the x position of the units destination
     int destY; //the y position of the unit's destination
     double xMove; //move speed in x direction
     double yMove; //move speed in y direction
     bool move; //is true when the unit should move
+    int attackWait;
+    int attackCounter;
     GLuint tex; //the texture
+    
     
 public:
 
@@ -44,6 +47,9 @@ public:
     
     /*only used for enemy units where they find a new direction*/
     void newDirection();
+    
+    /*returns true if the mouse is click on the unit*/
+    bool mouseOn(int mouseX, int mouseY);
     
     /*Selects the unit if the mouse is on*/
     bool mouseOn(int mouseStartX, int mouseStartY, int mouseX, int mouseY);

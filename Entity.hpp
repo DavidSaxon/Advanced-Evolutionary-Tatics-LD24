@@ -22,6 +22,13 @@ public:
 
     //VARIABLES
     bool selected; //is true when the unit is selected
+    bool player; //is true when is the player's unit
+    Entity* target; //the entity this unit is targeting
+    int damage; //the damage the unit inflicts
+    int attackType;
+    bool attackFlag; //is true when the unit wants to attack
+    bool dead; //is true when the entity is dead
+    int health; //the units health
 
     //FUNCTIONS
     /*updates the entity*/
@@ -32,6 +39,9 @@ public:
 
     /*Set the destination of the unit*/
     virtual void setDest(int x, int y);
+
+    /*returns true if the mouse pos is on the entity*/
+    virtual bool mouseOn(int mouseY, int mouseX);
 
     /*returns true if the mouse pos is on the entity*/
     virtual bool mouseOn(int mouseStartX, int mouseStartY, int mouseX, int mouseY);

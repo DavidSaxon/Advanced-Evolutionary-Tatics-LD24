@@ -31,7 +31,7 @@ bool Engine::init() {
 
     //open the window
     const SDL_VideoInfo *videoInfo = SDL_GetVideoInfo(); //get the video info
-    int flags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_HWPALETTE | SDL_FULLSCREEN; //sets the window flags
+    int flags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_HWPALETTE;// | SDL_FULLSCREEN; //sets the window flags
     if(videoInfo->hw_available) flags |= SDL_HWSURFACE; //check to see if hardware surfaces are enabled
     else flags |= SDL_SWSURFACE;
     if(videoInfo->blit_hw) flags |= SDL_HWACCEL; //check to see if hardware supports blitting

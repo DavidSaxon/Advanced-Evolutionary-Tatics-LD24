@@ -19,6 +19,7 @@
 #include "entities/Unit.hpp"
 #include "entities/Nexus.hpp"
 #include "entities/Wall.hpp"
+#include "entities/Attack.hpp"
 using namespace std;
 
 class Engine : public Event {
@@ -83,6 +84,10 @@ private:
     //VARIABLES
     string levelName; //the name of the current level    /*loads the level from a file*/
     map <int, vector<Entity*>*> entities; //a map that holds all the entites in the game in their respective groups
+    vector<Entity*> units;
+    vector<Entity*> backgrounds;
+    vector<Entity*> buildings;
+    vector<Entity*> attacks;
 
 
 public:
@@ -132,6 +137,9 @@ private:
     //images
     GLubyte *backgroundImg;
     GLubyte *rockImg;
+    GLubyte *attackSmallImg;
+    GLubyte *attackMedImg;
+    GLubyte *attackLargeImg;
     GLubyte *nexusBodyImg;
     GLubyte *nexusBlueImg;
     GLubyte *nexusRedImg;
@@ -139,6 +147,9 @@ private:
     //textures
     GLuint backgroundTex;
     GLuint rockTex;
+    GLuint attackSmallTex;
+    GLuint attackMedTex;
+    GLuint attackLargeTex;
     GLuint softBodySmallTex;
     GLuint nexusBodyTex;
     GLuint nexusBlueTex;

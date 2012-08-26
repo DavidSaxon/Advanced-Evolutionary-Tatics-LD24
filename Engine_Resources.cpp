@@ -21,6 +21,28 @@ void Engine::loadTextures() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, rockImg);
 
+    //load attack textures
+    loadImage((char*) "data/gfx/attack/attackSmall.png", width, height, hasAlpha, &attackSmallImg);
+    glGenTextures(1, &attackSmallTex);
+    glBindTexture(GL_TEXTURE_2D, attackSmallTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, attackSmallImg);
+
+    /*loadImage((char*) "data/gfx/attack/attackMed.png", width, height, hasAlpha, &attackMedImg);
+    glGenTextures(1, &attackMedTex);
+    glBindTexture(GL_TEXTURE_2D, attackMedTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, attackMedImg);
+
+    loadImage((char*) "data/gfx/attack/attackLarge.png", width, height, hasAlpha, &attackLargeImg);
+    glGenTextures(1, &attackLargeTex);
+    glBindTexture(GL_TEXTURE_2D, attackLargeTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, attackLargeImg);*/
+
     //load nexus textures
     loadImage((char*) "data/gfx/nexus/nexus.png", width, height, hasAlpha, &nexusBodyImg);
     glGenTextures(1, &nexusBodyTex);
@@ -55,6 +77,13 @@ void Engine::loadTextures() {
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
     free(backgroundImg);
+    free(rockImg);
+    free(attackSmallImg);
+    //free(attackMedImg);
+    //free(attackLargeImg);
+    free(nexusBodyImg);
+    free(nexusBlueImg);
+    free(nexusRedImg);
     free(softBodySmallImg);
 }
 
