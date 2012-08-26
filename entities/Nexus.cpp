@@ -22,19 +22,19 @@ void Nexus::draw(int offsetX, int offsetY) {
     //draw the body
     glBindTexture(GL_TEXTURE_2D, *bodyTex);
     glBegin(GL_QUADS);
-    glTexCoord2f(0.0, 0.0); glVertex3f(xPos, yPos, -0.0025);
-    glTexCoord2f(0.0, 1.0); glVertex3f(xPos, yPos+height, -0.0025);
-    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width, yPos+height, -0.0025);
-    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width, yPos, -0.0025);
+    glTexCoord2f(0.0, 0.0); glVertex3f(xPos+offsetX, yPos+offsetY, -0.0025);
+    glTexCoord2f(0.0, 1.0); glVertex3f(xPos+offsetX, yPos+height+offsetY, -0.0025);
+    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width+offsetX, yPos+height+offsetY, -0.0025);
+    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width+offsetX, yPos+offsetY, -0.0025);
     glEnd();
     
     //draw the team colour
     glBindTexture(GL_TEXTURE_2D, *colourTex);
     glBegin(GL_QUADS);
-    glTexCoord2f(0.0, 0.0); glVertex3f(xPos, yPos, -0.002);
-    glTexCoord2f(0.0, 1.0); glVertex3f(xPos, yPos+height, -0.002);
-    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width, yPos+height, -0.002);
-    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width, yPos, -0.002);
+    glTexCoord2f(0.0, 0.0); glVertex3f(xPos+offsetX, yPos+offsetY, -0.002);
+    glTexCoord2f(0.0, 1.0); glVertex3f(xPos+offsetX, yPos+height+offsetY, -0.002);
+    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width+offsetX, yPos+height+offsetY, -0.002);
+    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width+offsetX, yPos+offsetY, -0.002);
     glEnd();
 }
 

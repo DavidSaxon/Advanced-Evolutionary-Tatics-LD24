@@ -24,13 +24,17 @@ private:
     bool move; //is true when the unit should move
     int attackWait;
     int attackCounter;
-    GLuint tex; //the texture
+    GLuint* bodyTex; //the texture
+    GLuint* legTex;
+    GLuint* fangTex;
+    GLuint* eyeTex;
+    GLuint* colTex;
     
     
 public:
 
     //CONSTRUCTOR
-    Unit(int x, int y, bool p, GLuint t);
+    Unit(int x, int y, bool p, Body* b, Leg* l, Fang* f, Eye* e, GLuint* c);
     
     //DESTRUCTOR
     ~Unit();

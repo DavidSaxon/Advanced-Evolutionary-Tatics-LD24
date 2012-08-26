@@ -1,20 +1,27 @@
 #include "Unit.hpp"
 
 //CONSTRUCTOR
-Unit::Unit(int x, int y, bool p, GLuint t) {
+Unit::Unit(int x, int y, bool p, Body* b, Leg* l, Fang* f, Eye* e, GLuint* c) {
     xPos = x;
     yPos = y;
     player = p;
-    tex = t;
+    body = b;
+    leg = l;
+    fang = f;
+    eye = e;
+    bodyTex = body->tex;
+    legTex = leg->tex;
+    fangTex = fang->tex;
+    eyeTex = eye->tex;
+    colTex = c;
 
     //initialise variables
-    width = 25;
-    height = 25;
+    width = height = body->width;
     selected = false;
-    health = 20;
-    moveSpeed = 2;
-    attackType = 0;
-    range = 100;
+    health = body->health;
+    moveSpeed = leg->speed;
+    attackType = fang->type;
+    range = eye->range;
     target = NULL;
     destX = xPos;
     destY = yPos;
@@ -35,9 +42,31 @@ Unit::~Unit() {}
 //FUNCTIONS
 /*updates the Unit*/
 void Unit::update() {
-    
     if (target != NULL) {
-        if (target->health < 1) target = NULL; //target is dead TODO: get evolution here
+        if (target->health < 1) {
+            if (target->body->health > body->health) {
+                body = target->body;
+                health = body->health;
+                width = height = body->width;
+                bodyTex = body->tex;
+            }
+            else if (target->leg->speed > leg->speed) {
+                leg = target->leg;
+                moveSpeed = leg->speed;
+                legTex = leg->tex;
+            }
+            else if (target->fang->type > fang->type) {
+                fang = target->fang;
+                attackType = fang->type;
+                fangTex = fang->tex;
+            }
+            else if (target->eye->range > eye->range) {
+                eye = target->eye;
+                range = eye->range;
+                eyeTex = eye->tex;
+            }
+            target = NULL; //target is dead
+        }
         else {
             move = true;
             destX = target->getX();
@@ -56,10 +85,18 @@ void Unit::update() {
         if (move) { //move the unit towards it's destination
             if ((xPos >= destX-moveSpeed && xPos <= destX+moveSpeed) && (yPos >= destY-moveSpeed && yPos <= destY+moveSpeed)) move = false; //stop moving
             else {
-                if (destX > xPos) xPos += xMove;
-                else xPos -= xMove;
-                if (destY > yPos) yPos += yMove;
-                else yPos -= yMove;
+                if (destX > xPos) {
+                    if (xPos+xMove < 2000) xPos += xMove;
+                }
+                else {
+                    if (xPos-xMove > 0) xPos -= xMove;
+                }
+                if (destY > yPos) {
+                    if (yPos+yMove < 1000) yPos += yMove;
+                }
+                else {
+                    if (yPos-yMove > 0) yPos -= yMove;
+                }
             }
         }
     }
@@ -72,8 +109,8 @@ void Unit::update() {
             move = false;
         }
         else if (move) { //move the unit
-            xPos += xMove;
-            yPos += yMove;
+            if (xPos+xMove < 2000 && xPos+xMove > 0) xPos += xMove;
+            if (yPos+yMove < 1000 && yPos-yMove > 0) yPos += yMove;
         }
     }
 
@@ -82,22 +119,55 @@ void Unit::update() {
 
 /*draws the Unit*/
 void Unit::draw(int offsetX, int offsetY) {
-    glBindTexture(GL_TEXTURE_2D, tex);
+    //draw the body
+    glBindTexture(GL_TEXTURE_2D, *bodyTex);
     glBegin(GL_QUADS);
-    glTexCoord2f(0.0, 0.0); glVertex3f(xPos, yPos, -0.001);
-    glTexCoord2f(0.0, 1.0); glVertex3f(xPos, yPos+height, -0.001);
-    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width, yPos+height, -0.001);
-    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width, yPos, -0.001);
+    glTexCoord2f(0.0, 0.0); glVertex3f(xPos+offsetX, yPos+offsetY, -0.0019);
+    glTexCoord2f(0.0, 1.0); glVertex3f(xPos+offsetX, yPos+height+offsetY, -0.0019);
+    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width+offsetX, yPos+height+offsetY, -0.0019);
+    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width+offsetX, yPos+offsetY, -0.0019);
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, *legTex);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0, 0.0); glVertex3f(xPos+offsetX, yPos+offsetY, -0.0018);
+    glTexCoord2f(0.0, 1.0); glVertex3f(xPos+offsetX, yPos+height+offsetY, -0.0018);
+    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width+offsetX, yPos+height+offsetY, -0.0018);
+    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width+offsetX, yPos+offsetY, -0.0018);
+    glEnd();
+    
+    glBindTexture(GL_TEXTURE_2D, *fangTex);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0, 0.0); glVertex3f(xPos+offsetX, yPos+offsetY, -0.0017);
+    glTexCoord2f(0.0, 1.0); glVertex3f(xPos+offsetX, yPos+height+offsetY, -0.0017);
+    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width+offsetX, yPos+height+offsetY, -0.0017);
+    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width+offsetX, yPos+offsetY, -0.0017);
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, *colTex);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0, 0.0); glVertex3f(xPos+offsetX, yPos+offsetY, -0.0016);
+    glTexCoord2f(0.0, 1.0); glVertex3f(xPos+offsetX, yPos+height+offsetY, -0.0016);
+    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width+offsetX, yPos+height+offsetY, -0.0016);
+    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width+offsetX, yPos+offsetY, -0.0016);
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, *eyeTex);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0, 0.0); glVertex3f(xPos+offsetX, yPos+offsetY, -0.0015);
+    glTexCoord2f(0.0, 1.0); glVertex3f(xPos+offsetX, yPos+height+offsetY, -0.0015);
+    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width+offsetX, yPos+height+offsetY, -0.0015);
+    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width+offsetX, yPos+offsetY, -0.0015);
     glEnd();
 
     if (selected) { //if the unit is selected draw the slected box
         glBindTexture(GL_TEXTURE_2D, 0);
         glColor4d(1.0, 1.0, 0.0, 0.7);
         glBegin(GL_LINE_LOOP);
-        glVertex3f(xPos-3, yPos-3, -0.0005);
-        glVertex3f(xPos-3, yPos+height+4, -0.0005);
-        glVertex3f(xPos+width+4, yPos+height+4, -0.0005);
-        glVertex3f(xPos+width+4, yPos-3, -0.0005);
+        glVertex3f(xPos-3+offsetX, yPos-3+offsetY, -0.0005);
+        glVertex3f(xPos-3+offsetX, yPos+height+4+offsetY, -0.0005);
+        glVertex3f(xPos+width+4+offsetX, yPos+height+4+offsetY, -0.0005);
+        glVertex3f(xPos+width+4+offsetX, yPos-3+offsetY, -0.0005);
         glEnd();
     }
 }
@@ -161,10 +231,10 @@ bool Unit::collision(int x, int y, int w, int h) {
               ((yPos >= y && yPos <= y+h) || (yPos+height >= y && yPos+height <= y+h)));
     //if there is a collision bounce back a bit
     if (c) {
-        if (xPos < x) xPos -= 1;
-        else xPos += 1;
-        if (yPos < y) yPos -= 1;
-        else yPos += 1;
+        if (xPos < x) xPos -= 5;
+        else xPos += 5;
+        if (yPos < y) yPos -= 5;
+        else yPos += 5;
     }
 
     return c;

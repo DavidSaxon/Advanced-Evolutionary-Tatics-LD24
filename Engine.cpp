@@ -11,7 +11,7 @@ Engine::~Engine() {}
 bool Engine::init() {
     //initialise variables
     running = true;
-    gameState = LEVEL; //TODO: change to MENU in final
+    gameState = MENU;
     levelName = "data/levels/test.lvl";
     mouseX = 0;
     mouseY = 0;
@@ -25,13 +25,22 @@ bool Engine::init() {
     mouseStartY = 0;
     frameRate = 60;
     framesPassed = 0;
+    money = 0;
+    comLow = lowChance = 25;
+    comMed = medChance = 40;
+    highChance = 48;
+    comHigh = 100000; //computer gets no chance for high evolutions because he is a total dick with them
+    moneyCounter = moneyWait = 5;
+    offsetX = offsetY = 0;
+    upDown = leftRight = 0;
+    
 
     //initialise sdl
     initSDL();
 
     //open the window
     const SDL_VideoInfo *videoInfo = SDL_GetVideoInfo(); //get the video info
-    int flags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_HWPALETTE;// | SDL_FULLSCREEN; //sets the window flags
+    int flags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_HWPALETTE| SDL_FULLSCREEN; //sets the window flags
     if(videoInfo->hw_available) flags |= SDL_HWSURFACE; //check to see if hardware surfaces are enabled
     else flags |= SDL_SWSURFACE;
     if(videoInfo->blit_hw) flags |= SDL_HWACCEL; //check to see if hardware supports blitting
@@ -52,15 +61,35 @@ bool Engine::init() {
     //LoadTextures
     loadTextures();
 
-    loadLevel(); //TODO: remove this from here
+    sound = Mix_LoadWAV("data/music/Intro-Menu.wav");
+    if(sound == NULL) {
+        fprintf(stderr, "Unable to load WAV file: %s\n", Mix_GetError());
+    }
+     
+    introChannel = Mix_PlayChannel(-1, sound, -1);
+    if(introChannel == -1) {
+	    fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
+    }
 
     return true; //everything is initialised
 }
 
 /*Initialises SDL*/
 bool Engine::initSDL() {
-    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) return false;
+    if (SDL_Init(SDL_INIT_EVERYTHING | SDL_INIT_AUDIO) < 0) return false;
+    
+    int audio_rate = 22050;
+    Uint16 audio_format = AUDIO_S16SYS;
+    int audio_channels = 2;
+    int audio_buffers = 4096;
+
+    if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) != 0) {
+        fprintf(stderr, "Unable to initialize audio: %s\n", Mix_GetError());
+        exit(1);
+    }
+    
     return true; //sdl has been initialised
+    
 }
 
 /*Initialise openGL*/
@@ -71,7 +100,7 @@ bool Engine::initGL() {
     glClearColor(0, 0, 0, 0);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, 1920, 1080, 0, 0, 1);
+    glOrtho(0, 960, 540, 0, 0, 1);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glEnable(GL_TEXTURE_2D);
 
@@ -101,6 +130,7 @@ bool Engine::execute() {
         //checks to see what state the game is in
         switch (gameState) {
             case MENU:
+                menu();
                 break;
             case LEVEL: //update the level
                 levelUpdate(framesPassed);
@@ -114,10 +144,21 @@ bool Engine::execute() {
     return true; //the game has finished running
 }
 
+void Engine::menu() {
+    glBindTexture(GL_TEXTURE_2D, menuTex);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0, 1.0); glVertex3f(0, 0, -0.0005);
+    glTexCoord2f(0.0, 0.0); glVertex3f(0, 540, -0.0005);
+    glTexCoord2f(1.0, 0.0); glVertex3f(960, 540, -0.0005);
+    glTexCoord2f(1.0, 1.0); glVertex3f(960, 0, -0.0005);
+    glEnd();
+}
+
 /*Cleanup the game*/
 bool Engine::cleanup() {
     SDL_FreeSurface(display); //Remove the display window
-
+    Mix_FreeChunk(sound);
+    Mix_CloseAudio();
     return true; //cleanup has compeleted
 }
 

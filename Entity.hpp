@@ -7,6 +7,10 @@
 #include <iostream>
 #include <SDL/SDL_opengl.h>
 
+#include "Body.hpp"
+#include "Leg.hpp"
+#include "Fang.hpp"
+#include "Eye.hpp"
 using namespace std;
 
 class Entity {
@@ -29,6 +33,10 @@ public:
     bool attackFlag; //is true when the unit wants to attack
     bool dead; //is true when the entity is dead
     int health; //the units health
+    Body* body;
+    Leg* leg;
+    Fang* fang;
+    Eye* eye;
 
     //FUNCTIONS
     /*updates the entity*/

@@ -52,13 +52,13 @@ void Attack::update() {
 }
 
 /*draws the attack*/
-void Attack::draw(int offsetX, int offserY) {
+void Attack::draw(int offsetX, int offsetY) {
     glBindTexture(GL_TEXTURE_2D, *tex);
     glBegin(GL_QUADS);
-    glTexCoord2f(0.0, 0.0); glVertex3f(xPos, yPos, -0.001);
-    glTexCoord2f(0.0, 1.0); glVertex3f(xPos, yPos+height, -0.001);
-    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width, yPos+height, -0.001);
-    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width, yPos, -0.001);
+    glTexCoord2f(0.0, 0.0); glVertex3f(xPos+offsetX, yPos+offsetY, -0.001);
+    glTexCoord2f(0.0, 1.0); glVertex3f(xPos+offsetX, yPos+height+offsetY, -0.001);
+    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width+offsetX, yPos+height+offsetY, -0.001);
+    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width+offsetX, yPos+offsetY, -0.001);
     glEnd();
 }
 

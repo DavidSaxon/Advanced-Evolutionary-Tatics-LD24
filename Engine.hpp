@@ -6,15 +6,24 @@
     #define _ENGINE_H_
 
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <map>
 #include <sys/timeb.h>
 #include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
 #include <SDL/SDL_opengl.h>
+#include <GL/glx.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
 #include <png.h>
 
 #include "Define.hpp"
 #include "Event.hpp"
+#include "Body.hpp"
+#include "Leg.hpp"
+#include "Fang.hpp"
+#include "Eye.hpp"
 #include "Entity.hpp"
 #include "entities/Unit.hpp"
 #include "entities/Nexus.hpp"
@@ -46,7 +55,11 @@ private:
     int mouseStartY;
     int frameRate; //the max frame rate of the game
     int framesPassed; //the number of frames passed since the last loop
-
+    Mix_Chunk* sound;
+    int upDown;
+    int leftRight;
+    int introChannel;
+    
     //FUNCTIONS
     //get the current time in milliseconds
     int getMilliCount();
@@ -77,17 +90,49 @@ public:
 
     /*Cleanup the game*/
     bool cleanup();
+    
+    void menu();
 
 //LEVEL
 private:
 
     //VARIABLES
     string levelName; //the name of the current level    /*loads the level from a file*/
-    map <int, vector<Entity*>*> entities; //a map that holds all the entites in the game in their respective groups
     vector<Entity*> units;
     vector<Entity*> backgrounds;
     vector<Entity*> buildings;
     vector<Entity*> attacks;
+    int playerSpawnX;
+    int playerSpawnY;
+    int comSpawnX;
+    int comSpawnY;
+    int money;
+    int lowChance;
+    int medChance;
+    int highChance;
+    int comLow;
+    int comMed;
+    int comHigh;
+    int moneyWait;
+    int moneyCounter;
+    int offsetX;
+    int offsetY;
+
+    //body parts
+    Body* squishyBodySmall;
+    Body* exoBodySmall;
+    Body* armoredBodySmall;
+    Leg* leg4;
+    Leg* leg6;
+    Leg* wheel;
+    Leg* rocket;
+    Fang* light;
+    Fang* med;
+    Fang* heavy;
+    Eye* squint;
+    Eye* norm;
+    Eye* ant;
+    Eye* allSee;
 
 
 public:
@@ -101,6 +146,8 @@ public:
 
     /*loads the level from a file*/
     void loadLevel();
+    
+    void buildUnit(bool pl);
 
 //EVENT
 public:
@@ -114,6 +161,8 @@ public:
 
     /*When a key is pressed down*/
     void onKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode);
+    
+    void onKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode);
 
     /*When the mouse is moved*/
     void onMouseMove(int mX, int mY, int relX, int relY, bool left,bool right,bool middle);
@@ -144,16 +193,50 @@ private:
     GLubyte *nexusBlueImg;
     GLubyte *nexusRedImg;
     GLubyte *softBodySmallImg;
+    GLubyte *exoBodySmallImg;
+    GLubyte *armoredBodySmallImg;
+    GLubyte *leg4Img;
+    GLubyte *leg6Img;
+    GLubyte *wheelImg;
+    GLubyte *rocketImg;
+    GLubyte *lightImg;
+    GLubyte *medImg;
+    GLubyte *heavyImg;
+    GLubyte *squintImg;
+    GLubyte *normImg;
+    GLubyte *antImg;
+    GLubyte *allSeeImg;
+    GLubyte *blueImg;
+    GLubyte *redImg;
+    GLubyte *barImg;
+    GLubyte *menuImg;
     //textures
     GLuint backgroundTex;
     GLuint rockTex;
     GLuint attackSmallTex;
     GLuint attackMedTex;
     GLuint attackLargeTex;
-    GLuint softBodySmallTex;
     GLuint nexusBodyTex;
     GLuint nexusBlueTex;
     GLuint nexusRedTex;
+    GLuint softBodySmallTex;
+    GLuint exoBodySmallTex;
+    GLuint armoredBodySmallTex;
+    GLuint leg4Tex;
+    GLuint leg6Tex;
+    GLuint wheelTex;
+    GLuint rocketTex;
+    GLuint lightTex;
+    GLuint medTex;
+    GLuint heavyTex;
+    GLuint squintTex;
+    GLuint normTex;
+    GLuint antTex;
+    GLuint allSeeTex;
+    GLuint blueTex;
+    GLuint redTex;
+    GLuint barTex;
+    GLuint menuTex;
 
 public:
 

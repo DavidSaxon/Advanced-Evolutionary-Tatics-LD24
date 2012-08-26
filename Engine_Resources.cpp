@@ -29,7 +29,7 @@ void Engine::loadTextures() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, attackSmallImg);
 
-    /*loadImage((char*) "data/gfx/attack/attackMed.png", width, height, hasAlpha, &attackMedImg);
+    loadImage((char*) "data/gfx/attack/attackMed.png", width, height, hasAlpha, &attackMedImg);
     glGenTextures(1, &attackMedTex);
     glBindTexture(GL_TEXTURE_2D, attackMedTex);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -41,7 +41,7 @@ void Engine::loadTextures() {
     glBindTexture(GL_TEXTURE_2D, attackLargeTex);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, attackLargeImg);*/
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, attackLargeImg);
 
     //load nexus textures
     loadImage((char*) "data/gfx/nexus/nexus.png", width, height, hasAlpha, &nexusBodyImg);
@@ -73,18 +73,142 @@ void Engine::loadTextures() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, softBodySmallImg);
 
+    loadImage((char*) "data/gfx/unit/exoBodySmall.png", width, height, hasAlpha, &exoBodySmallImg);
+    glGenTextures(1, &exoBodySmallTex);
+    glBindTexture(GL_TEXTURE_2D, exoBodySmallTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, exoBodySmallImg);
+
+    loadImage((char*) "data/gfx/unit/armoredBodySmall.png", width, height, hasAlpha, &armoredBodySmallImg);
+    glGenTextures(1, &armoredBodySmallTex);
+    glBindTexture(GL_TEXTURE_2D, armoredBodySmallTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, armoredBodySmallImg);
+
+    loadImage((char*) "data/gfx/unit/leg4.png", width, height, hasAlpha, &leg4Img);
+    glGenTextures(1, &leg4Tex);
+    glBindTexture(GL_TEXTURE_2D, leg4Tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, leg4Img);
+
+    loadImage((char*) "data/gfx/unit/leg6.png", width, height, hasAlpha, &leg6Img);
+    glGenTextures(1, &leg6Tex);
+    glBindTexture(GL_TEXTURE_2D, leg6Tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, leg6Img);
+
+    loadImage((char*) "data/gfx/unit/wheel.png", width, height, hasAlpha, &wheelImg);
+    glGenTextures(1, &wheelTex);
+    glBindTexture(GL_TEXTURE_2D, wheelTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, wheelImg);
+
+    loadImage((char*) "data/gfx/unit/rocket.png", width, height, hasAlpha, &rocketImg);
+    glGenTextures(1, &rocketTex);
+    glBindTexture(GL_TEXTURE_2D, rocketTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, rocketImg);
+
+    loadImage((char*) "data/gfx/unit/lightFang.png", width, height, hasAlpha, &lightImg);
+    glGenTextures(1, &lightTex);
+    glBindTexture(GL_TEXTURE_2D, lightTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, lightImg);
+
+    loadImage((char*) "data/gfx/unit/medFang.png", width, height, hasAlpha, &medImg);
+    glGenTextures(1, &medTex);
+    glBindTexture(GL_TEXTURE_2D, medTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, medImg);
+
+    loadImage((char*) "data/gfx/unit/heavyFang.png", width, height, hasAlpha, &heavyImg);
+    glGenTextures(1, &heavyTex);
+    glBindTexture(GL_TEXTURE_2D, heavyTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, heavyImg);
+
+    loadImage((char*) "data/gfx/unit/squint.png", width, height, hasAlpha, &squintImg);
+    glGenTextures(1, &squintTex);
+    glBindTexture(GL_TEXTURE_2D, squintTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, squintImg);
+
+    loadImage((char*) "data/gfx/unit/norm.png", width, height, hasAlpha, &normImg);
+    glGenTextures(1, &normTex);
+    glBindTexture(GL_TEXTURE_2D, normTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, normImg);
+
+    loadImage((char*) "data/gfx/unit/ant.png", width, height, hasAlpha, &antImg);
+    glGenTextures(1, &antTex);
+    glBindTexture(GL_TEXTURE_2D, antTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, antImg);
+
+    loadImage((char*) "data/gfx/unit/allSee.png", width, height, hasAlpha, &allSeeImg);
+    glGenTextures(1, &allSeeTex);
+    glBindTexture(GL_TEXTURE_2D, allSeeTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, allSeeImg);
+
+    loadImage((char*) "data/gfx/unit/blue.png", width, height, hasAlpha, &blueImg);
+    glGenTextures(1, &blueTex);
+    glBindTexture(GL_TEXTURE_2D, blueTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, blueImg);
+
+    loadImage((char*) "data/gfx/unit/red.png", width, height, hasAlpha, &redImg);
+    glGenTextures(1, &redTex);
+    glBindTexture(GL_TEXTURE_2D, redTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, redImg);
+
+    loadImage((char*) "data/gfx/ui/bar.png", width, height, hasAlpha, &barImg);
+    glGenTextures(1, &barTex);
+    glBindTexture(GL_TEXTURE_2D, barTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, barImg);
+    
+    loadImage((char*) "data/gfx/ui/titlescreen.png", width, height, hasAlpha, &menuImg);
+    glGenTextures(1, &menuTex);
+    glBindTexture(GL_TEXTURE_2D, menuTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, menuImg);
 
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
     free(backgroundImg);
     free(rockImg);
     free(attackSmallImg);
-    //free(attackMedImg);
-    //free(attackLargeImg);
+    free(attackMedImg);
+    free(attackLargeImg);
     free(nexusBodyImg);
     free(nexusBlueImg);
     free(nexusRedImg);
     free(softBodySmallImg);
+    free(exoBodySmallImg);
+    free(armoredBodySmallImg);
+    /*free(leg4);
+    free(leg6);
+    free(wheel);
+    free(rocket);*/
 }
 
 /*Loads a png image*/
