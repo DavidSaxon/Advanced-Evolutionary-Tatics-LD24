@@ -1,10 +1,11 @@
 #include "Wall.hpp"
 
 //CONSTRUCTOR
-Wall::Wall(int x, int y) {
+Wall::Wall(int x, int y, GLuint* t) {
     xPos = x;
     yPos = y;
     width = height = 50;
+    tex = t;
 }
 
 //DESTRUCTOR
@@ -16,11 +17,11 @@ void Wall::update() {}
 
 /*draw the wall*/
 void Wall::draw(int offsetX, int offsetY) {
-    glColor4d(1.0, 1.0, 1.0, 1.0);
+    glBindTexture(GL_TEXTURE_2D, *tex);
     glBegin(GL_QUADS);
-    glVertex2f(xPos, yPos);
-    glVertex2f(xPos+50, yPos);
-    glVertex2f(xPos+50, yPos+50);
-    glVertex2f(xPos, yPos+50);
+    glTexCoord2f(0.0, 0.0); glVertex3f(xPos, yPos, -0.0039);
+    glTexCoord2f(0.0, 1.0); glVertex3f(xPos, yPos+height, -0.0039);
+    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width, yPos+height, -0.0039);
+    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width, yPos, -0.0039);
     glEnd();
 }

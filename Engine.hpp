@@ -45,11 +45,11 @@ private:
     int mouseStartY;
     int frameRate; //the max frame rate of the game
     int framesPassed; //the number of frames passed since the last loop
-    
+
     //FUNCTIONS
     //get the current time in milliseconds
     int getMilliCount();
-    
+
     //get the span of time since millicount
     int getMilliSpan(int timeStart);
 
@@ -76,21 +76,24 @@ public:
 
     /*Cleanup the game*/
     bool cleanup();
-    
+
 //LEVEL
 private:
 
     //VARIABLES
     string levelName; //the name of the current level    /*loads the level from a file*/
     map <int, vector<Entity*>*> entities; //a map that holds all the entites in the game in their respective groups
-    
-    
+
+
 public:
-    
+
     //FUNCTIONS
     /*updates the current level*/
     void levelUpdate(int framesPassed);
-    
+
+    /*Draw the level background*/
+    void drawBackground();
+
     /*loads the level from a file*/
     void loadLevel();
 
@@ -106,21 +109,49 @@ public:
 
     /*When a key is pressed down*/
     void onKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode);
-    
+
     /*When the mouse is moved*/
     void onMouseMove(int mX, int mY, int relX, int relY, bool left,bool right,bool middle);
-    
+
     /*When the left mouse button is pressed*/
     void onLButtonDown(int mX, int mY);
 
     /*When the left mouse button is released*/
     void onLButtonUp(int mX, int mY);
-    
+
     /*When the right mouse button is pressed*/
     void onRButtonDown(int mX, int mY);
-    
+
     /*When the right button is released*/
     void onRButtonUp(int mX, int mY);
+
+//RESOURCES
+private:
+
+    //VARIABLES
+    //images
+    GLubyte *backgroundImg;
+    GLubyte *rockImg;
+    GLubyte *nexusBodyImg;
+    GLubyte *nexusBlueImg;
+    GLubyte *nexusRedImg;
+    GLubyte *softBodySmallImg;
+    //textures
+    GLuint backgroundTex;
+    GLuint rockTex;
+    GLuint softBodySmallTex;
+    GLuint nexusBodyTex;
+    GLuint nexusBlueTex;
+    GLuint nexusRedTex;
+
+public:
+
+    //FUNCTIONS
+    /*Loads all the textures into memory*/
+    void loadTextures();
+
+    /*Loads a png image*/
+    bool loadImage(char* name, int &outWidth, int &outHeight, bool &outHasAlpha, GLubyte **outData);
 
 };
 

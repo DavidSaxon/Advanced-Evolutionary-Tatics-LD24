@@ -44,10 +44,13 @@ bool Engine::init() {
     //get the width and height
     width = display->w;
     height = display->h;
-    
+
     //find the scale
     scaleX = NATURAL_RESO_X/(float) width;
     scaleY = NATURAL_RESO_Y/(float) height;
+
+    //LoadTextures
+    loadTextures();
 
     loadLevel(); //TODO: remove this from here
 
@@ -62,15 +65,15 @@ bool Engine::initSDL() {
 
 /*Initialise openGL*/
 bool Engine::initGL() {
+    glEnable(GL_DEPTH_TEST);
     glEnable (GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0, 0, 0, 0);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, 1920, 1080, 0, 0, 1);
-    glMatrixMode(GL_MODELVIEW);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glEnable(GL_TEXTURE_2D);
-    glLoadIdentity();
 
     return true; //openGL has been initialised
 }

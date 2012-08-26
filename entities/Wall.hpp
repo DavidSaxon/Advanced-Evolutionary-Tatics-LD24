@@ -12,12 +12,13 @@ using namespace std;
 class Wall : public Entity {
 private:
 
-    
+    //VARIABLES
+    GLuint* tex; //the texture
 
 public:
 
     //CONSTRUCTOR
-    Wall(int x, int y);
+    Wall(int x, int y, GLuint* t);
     
     //DESTRUCTOR
     ~Wall();

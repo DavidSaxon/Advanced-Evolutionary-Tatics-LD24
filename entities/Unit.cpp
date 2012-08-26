@@ -1,10 +1,11 @@
 #include "Unit.hpp"
 
 //CONSTRUCTOR
-Unit::Unit(int x, int y, bool p) {
+Unit::Unit(int x, int y, bool p, GLuint t) {
     xPos = x;
     yPos = y;
     player = p;
+    tex = t;
 
     //initialise variables
     width = 25;
@@ -54,25 +55,22 @@ void Unit::update() {
 
 /*draws the Unit*/
 void Unit::draw(int offsetX, int offsetY) {
-    double x1 = floor(xPos+0.5);
-    double x2 = floor(xPos+width+0.5);
-    double y1 = floor(yPos+0.5);
-    double y2 = floor(yPos+height+0.5);
-    glColor4d(0.0, 1.0, 0.0, 1.0);
+    glBindTexture(GL_TEXTURE_2D, tex);
     glBegin(GL_QUADS);
-    glVertex2f(x1, y1);
-    glVertex2f(x2, y1);
-    glVertex2f(x2, y2);
-    glVertex2f(x1, y2);
+    glTexCoord2f(0.0, 0.0); glVertex3f(xPos, yPos, -0.001);
+    glTexCoord2f(0.0, 1.0); glVertex3f(xPos, yPos+height, -0.001);
+    glTexCoord2f(1.0, 1.0); glVertex3f(xPos+width, yPos+height, -0.001);
+    glTexCoord2f(1.0, 0.0); glVertex3f(xPos+width, yPos, -0.001);
     glEnd();
 
     if (selected) { //if the unit is selected draw the slected box
+        glBindTexture(GL_TEXTURE_2D, 0);
         glColor4d(1.0, 1.0, 0.0, 0.7);
         glBegin(GL_LINE_LOOP);
-        glVertex2f(x1-3, y1-3);
-        glVertex2f(x2+4, y1-3);
-        glVertex2f(x2+4, y2+4);
-        glVertex2f(x1-3, y2+4);
+        glVertex3f(xPos-3, yPos-3, -0.0005);
+        glVertex3f(xPos-3, yPos+height+4, -0.0005);
+        glVertex3f(xPos+width+4, yPos+height+4, -0.0005);
+        glVertex3f(xPos+width+4, yPos-3, -0.0005);
         glEnd();
     }
 }

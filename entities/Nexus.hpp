@@ -15,11 +15,13 @@ private:
 
     //VARIABLES
     bool player; //is true when is the player's unit
+    GLuint* bodyTex; //the main texture of the nexus
+    GLuint* colourTex; //the nexus colour texture
 
 public:
 
     //CONSTRUCTOR
-    Nexus(int x, int y, bool p);
+    Nexus(int x, int y, bool p, GLuint* tb, GLuint* tc);
 
     //DESTRUCTOR
     ~Nexus();

@@ -22,11 +22,12 @@ private:
     double xMove; //move speed in x direction
     double yMove; //move speed in y direction
     bool move; //is true when the unit should move
+    GLuint tex; //the texture
     
 public:
 
     //CONSTRUCTOR
-    Unit(int x, int y, bool p);
+    Unit(int x, int y, bool p, GLuint t);
     
     //DESTRUCTOR
     ~Unit();

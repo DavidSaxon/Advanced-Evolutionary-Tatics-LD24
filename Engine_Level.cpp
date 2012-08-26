@@ -63,6 +63,8 @@ void Engine::levelUpdate(int framesPassed) {
         }
     }
 
+    drawBackground();
+
     //now draw everything
     for (int j = 0; j < LEVEL_ENTITIES; ++j) {
         vector<Entity*>::iterator q;
@@ -70,6 +72,8 @@ void Engine::levelUpdate(int framesPassed) {
             (*q)->draw(0, 0); //TODO: use proper offset
         }
     }
+
+
 
     //draw the drag box
     if (leftMouseDown) {
@@ -91,6 +95,7 @@ void Engine::levelUpdate(int framesPassed) {
             dby1 = mouseY;
             dby2 = mouseStartY-dby1;
         }
+        glBindTexture(GL_TEXTURE_2D, 0);
         glColor4d(0.0, 0.0, 1.0, 0.3);
         //draw the centre part
         glBegin(GL_QUADS);
@@ -106,6 +111,21 @@ void Engine::levelUpdate(int framesPassed) {
         glVertex2f(dbx1+dbx2, dby1+dby2);
         glVertex2f(dbx1, dby1+dby2);
         glEnd();
+    }
+}
+
+/*Draw the level background*/
+void Engine::drawBackground() {
+    for (int i = -200; i < NATURAL_RESO_X+200; i += 128) {
+        for (int j = -200; j < NATURAL_RESO_Y+200; j += 128) {
+            glBindTexture(GL_TEXTURE_2D, backgroundTex);
+            glBegin(GL_QUADS);
+            glTexCoord2f(0.0, 0.0); glVertex3f(i, j, -0.004);
+            glTexCoord2f(0.0, 1.0); glVertex3f(i, j+128, -0.004);
+            glTexCoord2f(1.0, 1.0); glVertex3f(i+128, j+128, -0.004);
+            glTexCoord2f(1.0, 0.0); glVertex3f(i+128, j, -0.004);
+            glEnd();
+        }
     }
 }
 
@@ -131,9 +151,9 @@ void Engine::loadLevel() {
     }
 
     //FIXME: just for testing currently
-    entities[UNIT]->push_back(new Unit(50, 50, true));
-    entities[UNIT]->push_back(new Unit(200, 200, true));
-    entities[UNIT]->push_back(new Unit(1000, 500, false));
-    entities[BUILDING]->push_back(new Nexus(500, 500, true));
-    entities[BACKGROUND]->push_back(new Wall(400, 200));
+    entities[UNIT]->push_back(new Unit(50, 50, true, softBodySmallTex));
+    entities[UNIT]->push_back(new Unit(200, 200, true, softBodySmallTex));
+    entities[UNIT]->push_back(new Unit(1000, 500, false, softBodySmallTex));
+    entities[BUILDING]->push_back(new Nexus(500, 500, true, &nexusBodyTex, &nexusBlueTex));
+    entities[BACKGROUND]->push_back(new Wall(400, 200, &rockTex));
 }
